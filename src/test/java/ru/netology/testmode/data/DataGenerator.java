@@ -1,16 +1,21 @@
 package ru.netology.testmode.data;
 
-import com.github.javafaker.Faker;
-import jdk.jfr.ContentType;
 
+import com.github.javafaker.Faker;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
+import io.restassured.specification.RequestSpecification;
+import lombok.Value;
 
 import java.util.Locale;
 
+import static io.restassured.RestAssured.given;
 
 public class DataGenerator {
 
     private static final RequestSpecification requestSpec = new RequestSpecBuilder()
-            .setBaseUsi("http://localhost")
+            .setBaseUri("http://localhost")
             .setPort(9999)
             .setAccept(ContentType.JSON)
             .setContentType(ContentType.JSON)
@@ -25,7 +30,7 @@ public class DataGenerator {
 
     private static void sendRequest(RegistrationDto user) {
         given()
-                .spes(requestSpec)
+                .spec(requestSpec)
                 .body(user)
                 .when()
                 .post("/api/system/users")
@@ -53,12 +58,13 @@ public class DataGenerator {
         }
 
         public static RegistrationDto getRegisteredUser(String status) {
-            var registered = getUser(status);
+            var registeredUser = getUser(status);
             sendRequest(registeredUser);
             return registeredUser;
         }
     }
 
+    @Value
     public static class RegistrationDto {
         String login;
         String password;
