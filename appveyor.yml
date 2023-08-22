@@ -13,5 +13,5 @@ install:
   - chmod +x gradlew
   - java -jar ./artifacts/app-ibank-build-for-testers.jar &
 
-  build_script:
+build_script:
     - ./gradlew clean test --info -Dselenide.headless=true
